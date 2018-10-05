@@ -4,7 +4,7 @@
 \brief
 This program is aimed to solve all cases of square polynomial equations
 with a single variable(univariate),
-including solutions with rational and irrational roots as well as real and imaginary numbers.
+including solutions with rational and irrational roots.
 \author Max Shkut ; Github: https://github.com/MXMSHKT
 */
 //}============================================================================
