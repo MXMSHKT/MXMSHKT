@@ -13,7 +13,7 @@ This program reads file with data,calculate resistivity and write result in file
 #include <math.h>
 #include<stdlib.h>
 
-/// Cross-sectional area of a wire (10^(-3) Òm^2)
+/// Cross-sectional area of a wire (10^(-3) —Åm^2)
 const int Square = 1;
 /// Length of wire 1 (cm)
 const int L1 = 20;
@@ -32,10 +32,9 @@ const double Imax = 300;
 /// Minimum value of amperage (A) and voltage (V)
 const double Min = 0;
 /// Maximum value of voltage (V)
-const double Umax = 601;
+const double Umax = 600;
+const double Max = 601;
 const double tolerance = 1e-10;
-
-
 
 
 int Calculation ();
@@ -45,8 +44,7 @@ int ErrorinLine( double U[], double I[]);
 int Count( int z, int L, double U[],int NMeas, int S, double I[], FILE* output, double* avgU, double* avgI, double* avgres);
 void CalculateForL1( double U[], double I[], FILE* input, FILE* output, double* avgU1, double* avgI1, double* avgres1);
 void PrintCSV (double U[], double I[], FILE* outputCSV);
-int ToleranceU(double value);
-int ToleranceI(double value);
+int Tolerance(double value);
 
 //{============================================================================
 /*! \function
@@ -85,10 +83,15 @@ int main ()
 int Calculation ()
     {
         double avgU1 = 0, avgU2 = 0, avgU3 = 0, avgI1 = 0, avgI2 = 0, avgI3 = 0, avgres1 = 0, avgres2 = 0, avgres3 = 0;
-       //double U[size], I[size];
 
         double *U = (double *) calloc (NMeas3,sizeof(double));
         double *I = (double *) calloc (NMeas3,sizeof(double));
+
+        if(!U || !I)
+            {
+                printf("Error processing data\n");
+                return -1;
+            }
 
         FILE* output = fopen ("labka.txt", "w");
         FILE* outputCSV = fopen ("grafik.csv", "w");
@@ -150,7 +153,6 @@ int Calculation ()
         return (0);
     }
 
-
 //{============================================================================
 /*!
     \function
@@ -207,7 +209,7 @@ int ErrorinLine( double U[], double I[])
     {
         for (int line = 0; line < NMeas3; line++)
             {
-                if ((ToleranceU(U[line]) == 1) || (ToleranceI(I[line]) == 1))
+                if ((Tolerance(U[line]) == 1) || (Tolerance(I[line]) == 1))
                     {
                         return (line + 1);
                     }
@@ -242,11 +244,14 @@ int Count( int z, int L, double U[],int NMeas, int S, double I[], FILE* output, 
                 fprintf (output, "%4.4f", resistivity);
                 fprintf (output, " * 10^(-3) Om*cm^2\n");
             }
+
         *avgU = SumU / m;
         *avgI = SumI / m;
         *avgres = SumRes / m;
         return 0;
     }
+
+//=============================================================================
 
 void PrintCSV (double U[], double I[], FILE* outputCSV)
 	{
@@ -259,20 +264,14 @@ void PrintCSV (double U[], double I[], FILE* outputCSV)
             }
 	}
 
-int ToleranceU(double value)
-    {
-        if ((value < Min - tolerance) || (value > Umax - tolerance))
-            return 1;
-        if(fabs(value) < tolerance)
-            return 1;
-        return 0;
-    }
+//=============================================================================
 
-int ToleranceI(double value)
+int Tolerance(double value)
     {
-        if (value < Min - tolerance || value > Imax - tolerance)
+        if (value < Min - tolerance || value > Max - tolerance)
             return 1;
         if(fabs(value) < tolerance)
             return 1;
+
         return 0;
     }
