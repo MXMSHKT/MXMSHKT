@@ -71,11 +71,10 @@ char* fileToString(FILE* input, int* stringLength)
         return string;
     }
 /*!
-	\function This function translates string with "\n" symbols to pointer array (can be used to translate text to the stribg array where every line is a different string)
+	\function This function translates string with "\n" symbols to pointer array 
 	\param string String that should be translated
 	\param stringLength length of the string that should be translated
-	\param arrayLength pointer to the variable where array length should be stored(can be null);
-	\return returns array of strings.
+	\param arrayLength pointer to the variable where array length should be stored;
 */
 
 char** stringToPtr(char* string, int stringLength, int* arrayLength)
@@ -110,7 +109,6 @@ char** stringToPtr(char* string, int stringLength, int* arrayLength)
 	\function Copyes pointer array
 	\param ptrArray pointer array that should be copied;
 	\param arrayLength length of the array
-	\return returns pointer to the new array with values from old one
 */
 char** ptrArrayCopy(char** ptrArray, int arrayLength)
     {
